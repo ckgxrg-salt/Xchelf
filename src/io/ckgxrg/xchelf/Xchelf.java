@@ -11,7 +11,13 @@ public class Xchelf {
 	public static void main(String[] args) {
 		Graph g = new Graph(20);
 		g.connect(1, 6);
-		g.split(2, 7);
-		System.out.println(g.toString());
+		g.connect(6, 8);
+		g.connect(8, 1);
+		g.connect(8, 13);
+		g.connect(13, 6);
+		g.connect(13, 1);
+		g.connect(1, 9);
+		g.connect(13, 9);
+		System.out.println(MaxCliqueProblem.solve(g));
 	}
 }
