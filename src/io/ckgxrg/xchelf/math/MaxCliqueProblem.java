@@ -22,7 +22,6 @@ public class MaxCliqueProblem {
 		for(int i = 0; i < g.size; i++) {
 			nodes = new ArrayList<Integer>();
 			nowLayer = 0;
-			System.out.println("Major Node: " + i);
 			trace(i);
 		}
 		return solution;
@@ -31,13 +30,9 @@ public class MaxCliqueProblem {
 	// The main recursion method.
 	@SuppressWarnings("unchecked")
 	private static void trace(int node) {
-		System.out.println("Starting at Layer: " + nowLayer);
-		System.out.println("Tracing Node: " + node);
 		if(!allConnected(node)) {
-			System.out.println("Node: " + node + " is not allConnected, Reverting");
 			if(nodes.size() > solution.size()) {
 				solution = (ArrayList<Integer>) nodes.clone();
-				System.out.println("Found a solution at: " + node);
 			}
 			return;
 		}

@@ -55,6 +55,22 @@ public class Graph {
 		}
 	}
 	
+	public void splitAll(ArrayList<Integer> target) {
+		for(int i = 0; i < target.size(); i++) {
+			for(int j = i; j < target.size(); j++) {
+				split(target.get(i), target.get(j));
+			}
+		}
+		mat.superimpose();
+	}
+	
+	/*
+	 * Superimposes the matrix wrapped.
+	 */
+	public void superimpose() {
+		mat.superimpose();
+	}
+	
 	/*
 	 * Checks if the 2 nodes are connected.
 	 * @param node1 The first node

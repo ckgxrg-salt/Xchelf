@@ -1,5 +1,8 @@
 package io.ckgxrg.xchelf;
 
+import java.util.ArrayList;
+
+import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.math.*;
 
 /*
@@ -9,15 +12,20 @@ import io.ckgxrg.xchelf.math.*;
  */
 public class Xchelf {
 	public static void main(String[] args) {
-		Graph g = new Graph(20);
-		g.connect(1, 6);
-		g.connect(6, 8);
-		g.connect(8, 1);
-		g.connect(8, 13);
-		g.connect(13, 6);
-		g.connect(13, 1);
-		g.connect(1, 9);
-		g.connect(13, 9);
-		System.out.println(MaxCliqueProblem.solve(g));
+		Courses.Acc.addName("A");
+		Courses.Art.addName("A");
+		Courses.Chem2.addName("A");
+		Courses.Chem2.addName("B");
+		Courses.CS.addName("B");
+		Courses.FM.addName("B");
+		Graph g = Courses.generateGraph();
+		ArrayList<Integer> A = MaxCliqueProblem.solve(g);
+		System.out.println(Courses.prettyPrint(A));
+		g.splitAll(A);
+		ArrayList<Integer> B = MaxCliqueProblem.solve(g);
+		System.out.println(Courses.prettyPrint(B));
+		g.splitAll(B);
+		ArrayList<Integer> C = MaxCliqueProblem.solve(g);
+		System.out.println(Courses.prettyPrint(C));
 	}
 }
