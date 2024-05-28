@@ -10,6 +10,10 @@ import io.ckgxrg.xchelf.math.Graph;
  */
 public class Courses {
 
+	/*
+	 * @field map The CourseID-Course mapping table.
+	 * @field trans The NodeID-CourseID table used to solve MCP.
+	 */
 	public static HashMap<Integer, Course> map = new HashMap<Integer, Course>();
 	static HashMap<Integer, Integer> trans;
 	
@@ -32,25 +36,47 @@ public class Courses {
 	 * The Complex courses do not represent the actual course.
 	 * @see io.ckgxrg.xchelf.data.ComplexCourse.getActual();
 	 */
-	public static Course Phys = register(0, "AS Physics");
+	public static Course Phys = register(0, "AS Physics", 3);
 	public static Course Phys2 = register(1, "A2 Physics");
 	public static Course Chem = register(2, "AS Chemistry");
 	public static Course Chem2 = register(3, "A2 Chemistry");
 	public static Course Eco = register(4, "AS Economics");
-	public static Course Eco2 = register(5, "A2 Economics");
+	public static Course Eco2 = register(5, "A2 Economics", 3);
 	public static Course Bio = register(6, "AS Biology");
 	public static Course CS = register(7, "AS Computer Science");
 	public static Course Psy = register(8, "AS Psychology");
 	public static Course Acc = register(9, "AS Accounting");
 	public static Course Art = register(10, "AS Art and Design");
-	public static Course FM = register(11, "AS Further Mathematics");
+	public static Course FM = register(11, "AS Further Mathematics", 3);
 	
+	// Creates an entry in the table.
 	public static Course register(int id, String name) {
-		Course c = new Course(id, name);
-		map.put(id, c);
+		return register(id, name, 0);
+	}
+	public static Course register(int id, String name, int complex) {
+		Course c;
+		if(complex == 0) {
+			c = new Course(id, name);
+			map.put(id, c);
+		} else {
+			c = new ComplexCourse(id, name);
+			map.put(id, c);
+			ComplexCourse d = (ComplexCourse) c;
+			if(complex != -1) d.shadow(complex);
+		}
 		return c;
 	}
+	public static void leave(int id) {
+		map.remove(id);
+	}
 	
+	/*
+	 * Creates a graph, where
+	 * NodeIDs and corresponding CourseIDs are recorded in @field trans
+	 * Each remaining course as a vertex
+	 * Each pair of courses with no students overlapping is connected as an edge
+	 * from the current @field map table.
+	 */
 	public static Graph generateGraph() {
 		Graph g = new Graph(map.size());
 		trans = new HashMap<Integer, Integer>();
@@ -61,7 +87,6 @@ public class Courses {
 			for(int j : map.keySet()) {
 				if(!map.get(i).conflict(map.get(j))) {
 					g.connect(index, jndex);
-				} else {
 				}
 				jndex++;
 			}
@@ -70,10 +95,13 @@ public class Courses {
 		return g;
 	}
 	
+	/*
+	 * Debug use.
+	 */
 	public static String prettyPrint(ArrayList<Integer> courses) {
 		StringBuilder sb = new StringBuilder("[ ");
 		for(Integer i : courses) {
-			sb.append(map.get(i).getName());
+			sb.append(NameRegistry.courseName(map.get(i)));
 			sb.append(", ");
 		}
 		sb.delete(sb.length() - 2, sb.length());
@@ -94,16 +122,34 @@ public class Courses {
 		return res;
 	}
 	
+	/*
+	 * Assign a Group to the processed courses and remove them from the
+	 * to-be-grouped list.
+	 */
 	public static void assign(Group g, ArrayList<Integer> arr) {
 		for(Integer i : arr) {
 			map.get(i).group = g;
 			map.remove(i);
 		}
 	}
+	
+	/*
+	 * Checks if all courses have been assigned to a group.
+	 */
 	public static boolean allAssigned() {
 		for(Course c : map.values()) {
-			if(c.group == Group.UNKNOWN) return false;
+			if(c.group == Group.UNKNOWN) {
+				//System.out.println("Not assigned Course: " + c.name);
+				return false;
+			}
 		}
 		return true;
+	}
+	public static ArrayList<Course> unassigned(){
+		ArrayList<Course> res = new ArrayList<Course>();
+		for(Course c : map.values()) {
+			if(c.group == Group.UNKNOWN) res.add(c);
+		}
+		return res;
 	}
 }

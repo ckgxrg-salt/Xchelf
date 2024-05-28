@@ -12,6 +12,9 @@ public class Course {
 	ArrayList<String> students;
 	Group group;
 
+	/*
+	 * A course entry.
+	 */
 	public Course(int id, String courseName) {
 		name = courseName;
 		group = Group.UNKNOWN;
@@ -19,12 +22,31 @@ public class Course {
 		this.students = new ArrayList<String>();
 	}
 	
-	public void addName(String name) {
+	/*
+	 * Enroll a student to the course.
+	 */
+	public void addStudent(String name) {
 		students.add(name);
 	}
 	
+	/*
+	 * Return the list of students
+	 */
+	public ArrayList<String> students() {
+		return students;
+	}
+	
+	/*
+	 * Returns the course name.
+	 * DO NOT use, use NameRegistry.courseName() instead.
+	 * @see NameRegistry.courseName()
+	 */
+	@Deprecated
 	public String getName() {
 		return this.name;
+	}
+	public Group getGroup() {
+		return this.group;
 	}
 	
 	/*
