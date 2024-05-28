@@ -20,6 +20,7 @@ public class MaxCliqueProblem {
 		g = graph;
 		solution = new ArrayList<Integer>();
 		for(int i = 0; i < g.size; i++) {
+			//System.out.println("Root node: " + i);
 			nodes = new ArrayList<Integer>();
 			nowLayer = 0;
 			trace(i);
@@ -27,17 +28,37 @@ public class MaxCliqueProblem {
 		return solution;
 	}
 	
+	/*
+	 * Similar as Graph.adjacents, but eliminated possibility of infinite recursion.
+	 */
+	private static ArrayList<Integer> enhancedAdjacents(int node){
+		ArrayList<Integer> arr = g.adjacents(node);
+		arr.removeAll(nodes);
+		return arr;
+	}
+	
 	// The main recursion method.
 	@SuppressWarnings("unchecked")
 	private static void trace(int node) {
+		//System.out.println("At Node: " + node);
 		if(!allConnected(node)) {
+			//System.out.println("Node: " + node + " not allConnected");
 			if(nodes.size() > solution.size()) {
 				solution = (ArrayList<Integer>) nodes.clone();
+				//System.out.println("Solution: " + nodes);
 			}
 			return;
 		}
 		nowLayer++;
 		nodes.add(node);
+		if(enhancedAdjacents(node).isEmpty()) {
+			//System.out.println("Node: " + node + " reached the end");
+			if(nodes.size() > solution.size()) {
+				solution = (ArrayList<Integer>) nodes.clone();
+				//System.out.println("Solution: " + nodes);
+			}
+			return;
+		}
 		for(int i : g.adjacents(node)) {
 			if(nodes.contains(i)) continue;
 			trace(i);

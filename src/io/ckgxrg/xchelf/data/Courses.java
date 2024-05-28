@@ -11,6 +11,7 @@ import io.ckgxrg.xchelf.math.Graph;
 public class Courses {
 
 	public static HashMap<Integer, Course> map = new HashMap<Integer, Course>();
+	static HashMap<Integer, Integer> trans;
 	
 	/*
 	 * List of all available courses.
@@ -52,14 +53,20 @@ public class Courses {
 	
 	public static Graph generateGraph() {
 		Graph g = new Graph(map.size());
-		for(int i = 0; i < map.size(); i++) {
-			for(int j = i + 1; j < map.size(); j++) {
+		trans = new HashMap<Integer, Integer>();
+		int index = 0;
+		for(int i : map.keySet()) {
+			trans.put(index, i);
+			int jndex = 0;
+			for(int j : map.keySet()) {
 				if(!map.get(i).conflict(map.get(j))) {
-					g.connect(i, j);
+					g.connect(index, jndex);
+				} else {
 				}
+				jndex++;
 			}
+			index++;
 		}
-		g.superimpose();
 		return g;
 	}
 	
@@ -72,5 +79,31 @@ public class Courses {
 		sb.delete(sb.length() - 2, sb.length());
 		sb.append(" ]");
 		return sb.toString();
+	}
+	
+	/*
+	 * Since the node ids returned from MCP is not always equivalent to course ids,
+	 * use thie method to ensure getting the correct ids.
+	 * @param nodeIDs The node ids from MaxCliqueProblem.
+	 */
+	public static ArrayList<Integer> translate(ArrayList<Integer> nodeIDs){
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		for(Integer i : nodeIDs) {
+			res.add(trans.get(i));
+		}
+		return res;
+	}
+	
+	public static void assign(Group g, ArrayList<Integer> arr) {
+		for(Integer i : arr) {
+			map.get(i).group = g;
+			map.remove(i);
+		}
+	}
+	public static boolean allAssigned() {
+		for(Course c : map.values()) {
+			if(c.group == Group.UNKNOWN) return false;
+		}
+		return true;
 	}
 }

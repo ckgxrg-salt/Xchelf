@@ -31,6 +31,16 @@ public class Matrixnb {
 	public void set(int row, int col, int value) {
 		mat[row][col] = value == 0 ? false : true;
 	}
+	public void rmColumn(int row) {
+		for(int i = 0; i < length; i++) {
+			mat[i][row] = false;
+		}
+	}
+	public void rmRow(int col) {
+		for(int i = 0; i < length; i++) {
+			mat[col][i] = false;
+		}
+	}
 	
 	/*
 	 * Gets the value in a position.

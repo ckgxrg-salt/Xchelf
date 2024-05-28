@@ -56,12 +56,10 @@ public class Graph {
 	}
 	
 	public void splitAll(ArrayList<Integer> target) {
-		for(int i = 0; i < target.size(); i++) {
-			for(int j = i; j < target.size(); j++) {
-				split(target.get(i), target.get(j));
-			}
+		for(int i : target) {
+			mat.rmRow(i);
+			mat.rmColumn(i);
 		}
-		mat.superimpose();
 	}
 	
 	/*
