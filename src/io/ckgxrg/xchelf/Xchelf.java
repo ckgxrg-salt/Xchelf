@@ -37,7 +37,7 @@ public class Xchelf {
 		} else {
 			System.out.println("Conflicts found: ");
 			for(Course c : Courses.unassigned()) {
-				System.out.println(c.getName());
+				System.out.println(NameRegistry.courseName(c));
 				ConflictHandler.why(c);
 			}
 		}
@@ -59,15 +59,19 @@ public class Xchelf {
 	}
 	
 	public static void main(String[] args) {
-		Courses.FM.addStudent("A");
-		Courses.Art.addStudent("A");
-		Courses.Chem2.addStudent("A");
-		Courses.Chem.addStudent("B");
-		Courses.CS.addStudent("B");
-		Courses.Acc.addStudent("B");
-		Courses.Phys.addStudent("C");
-		Courses.Acc.addStudent("C");
-		Courses.Eco2.addStudent("C");
+		Courses.Phys2.addStudent("山羊");
+		Courses.Eco.addStudent("山羊");
+		Courses.Chem2.addStudent("山羊");
+		Courses.Chem.addStudent("咕噜");
+		Courses.CS.addStudent("咕噜");
+		Courses.Acc.addStudent("咕噜");
+		Courses.Phys.addStudent("下雨");
+		Courses.FM.addStudent("下雨");
+		Courses.Eco2.addStudent("下雨");
+		Courses.Bio.addStudent("海燕");
+		Courses.Psy.addStudent("海燕");
+		Courses.Art.addStudent("海燕");
+		//Courses.FM.addStudent("海燕");
 		NameRegistry.allCourses.addAll(Courses.map.values());
 		firstAttempt();
 		handleComplex();

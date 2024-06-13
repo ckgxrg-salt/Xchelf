@@ -15,25 +15,28 @@ public class NameRegistry {
 	public static HashSet<String> students = new HashSet<String>();
 	public static HashSet<Course> allCourses = new HashSet<Course>();
 	
+	/*
+	 * Registers the arrangement.
+	 */
 	public static void entry(String student, Course c, Group g) {
 		students.add(student);
 		switch(g) {
 		case Group.A :
-			if(A.get(student) != null && !(A.get(student) instanceof ComplexCourse)) {
+			if(A.get(student) != null && !(A.get(student) instanceof ShadowCourse)) {
 				//System.out.println("Refusing, this student already chose a course at this group.");
 				break;
 			}
 			A.put(student, c);
 			break;
 		case Group.B :
-			if(B.get(student) != null && !(B.get(student) instanceof ComplexCourse)) {
+			if(B.get(student) != null && !(B.get(student) instanceof ShadowCourse)) {
 				//System.out.println("Refusing, this student already chose a course at this group.");
 				break;
 			}
 			B.put(student, c);
 			break;
 		case Group.C :
-			if(C.get(student) != null && !(C.get(student) instanceof ComplexCourse)) {
+			if(C.get(student) != null && !(C.get(student) instanceof ShadowCourse)) {
 				//System.out.println("Refusing, this student already chose a course at this group.");
 				break;
 			}
@@ -44,6 +47,9 @@ public class NameRegistry {
 		}
 	}
 	
+	/*
+	 * Queries a student's course arrangement of a group.
+	 */
 	public static Course courseOf(String student, Group g) {
 		switch(g) {
 		case Group.A :

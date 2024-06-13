@@ -11,10 +11,10 @@ public class ConflictHandler {
 		for(Course d : NameRegistry.allCourses) {
 			ArrayList<String> arr;
 			if(!(arr = findOverlap(c.students(), d.students())).isEmpty()) {
-				System.out.print("With course " + d.name);
+				System.out.print("With course " + d.name + "(Group " + d.getGroup() + ")");
 				System.out.println(", the following students are overlapping:");
 				for(String s : arr) {
-					System.out.print(s + ", ");
+					System.out.print(s + " ");
 				}
 				System.out.println();
 			}

@@ -28,6 +28,9 @@ public class Course {
 	public void addStudent(String name) {
 		students.add(name);
 	}
+	public void groupMove(ArrayList<String> students) {
+		this.students = students;
+	}
 	
 	/*
 	 * Return the list of students

@@ -20,18 +20,18 @@ public class Courses {
 	/*
 	 * List of all available courses.
 	 * The Names and IDs are listed below.
-	 * Complex AS Physics: 0
+	 * (Shadowed) AS Physics: 0
 	 * A2 Physics: 1
 	 * AS Chemistry: 2
 	 * A2 Chemistry: 3
 	 * AS Economics: 4
-	 * Complex A2 Economics: 5
+	 * (Shadowed) A2 Economics: 5
 	 * AS Biology: 6
 	 * AS Computer Science: 7
 	 * AS Psychology: 8
 	 * AS Accounting: 9
 	 * AS Art and Design: 10
-	 * Complex AS Further Mathematics: 11
+	 * (Shadowed) AS Further Mathematics: 11
 	 * 
 	 * The Complex courses do not represent the actual course.
 	 * @see io.ckgxrg.xchelf.data.ComplexCourse.getActual();
@@ -53,16 +53,16 @@ public class Courses {
 	public static Course register(int id, String name) {
 		return register(id, name, 0);
 	}
-	public static Course register(int id, String name, int complex) {
+	public static Course register(int id, String name, int shadows) {
 		Course c;
-		if(complex == 0) {
+		if(shadows == 0) {
 			c = new Course(id, name);
 			map.put(id, c);
 		} else {
-			c = new ComplexCourse(id, name);
+			c = new ShadowCourse(id, name);
 			map.put(id, c);
-			ComplexCourse d = (ComplexCourse) c;
-			if(complex != -1) d.shadow(complex);
+			ShadowCourse d = (ShadowCourse) c;
+			if(shadows != -1) d.shadow(shadows);
 		}
 		return c;
 	}
