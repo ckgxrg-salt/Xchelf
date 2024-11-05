@@ -14,8 +14,11 @@ public class ShadowEvolution {
   public static final int MAX_CAPACITY = 50;
   public static final int MIN_CAPACITY = 20;
   public static final int ELITE_COUNT = 5;
-  public static final int ELITE_MAX_PENALTY = 30;
-  public static final double MUTATE_PROBABLITY = 0.00005;
+  public static final int ELITE_MAX_PENALTY = 120;
+  public static final double MUTATE_PROBABLITY = 0.0005;
+
+  public static final int PENALTY_UNASSIGNED = 10;
+  public static final int PENALTY_CLASH = 2;
 
   public static HashSet<Gene> population;
   public static HashSet<Gene> elites;
@@ -32,8 +35,11 @@ public class ShadowEvolution {
       population.add(new Gene());
     }
     System.out.println("Initial generation populated. ");
-    calculatePenalty(new ArrayList<Gene>(population));
-    System.out.println("Initial penalty calculated. ");
+    ArrayList<Gene> sort = new ArrayList<Gene>(population);
+    calculatePenalty(sort);
+    Collections.sort(sort);
+    System.out.println("Min initial penalty: " + sort.getFirst().penalty);
+    System.out.println("Max initial penalty: " + sort.getLast().penalty);
   }
 
   /** Calculates penalty for each Gene in the set. Very expensive. */
@@ -54,9 +60,15 @@ public class ShadowEvolution {
       // System.out.println("Group C: " + Courses.prettyPrint(C));
       eco.assign(Group.C, c);
 
+      NameRegistry.reset();
       g.penalty = 0;
-      for (Course co : eco.unassigned()) {
-        g.penalty += 10;
+      g.penalty += PENALTY_UNASSIGNED * eco.unassigned().size();
+      for (Course co : eco.env.values()) {
+        for (String s : co.getStudents()) {
+          if (!NameRegistry.entry(s, co, co.getGroup())) {
+            g.penalty += PENALTY_CLASH;
+          }
+        }
       }
     }
   }
@@ -84,7 +96,6 @@ public class ShadowEvolution {
     Collections.sort(candidates);
     population.clear();
     // Protect the elites
-    population.addAll(elites);
     int current = candidates.getFirst().penalty;
     System.out.println("Current Generation lowest penalty: " + current);
     for (Gene g : candidates) {
@@ -99,6 +110,7 @@ public class ShadowEvolution {
       population.add(g);
       eliteCheck(g);
     }
+    population.addAll(elites);
     System.out.println("Current Generation highest penalty: " + current);
     System.out.println("Current Generation size: " + population.size());
   }
@@ -114,15 +126,11 @@ public class ShadowEvolution {
         g.isElite = true;
         System.out.println("Found a new Elite with penalty " + g.penalty);
       } else {
-        Gene highest = g;
-        for (Gene elite : elites) {
-          if (elite.penalty > highest.penalty) {
-            highest = elite;
-          }
-        }
-        if (highest != g) {
-          elites.remove(highest);
-          highest.isElite = false;
+        ArrayList<Gene> sort = new ArrayList<Gene>(elites);
+        Collections.sort(sort);
+        if (sort.getLast().penalty > g.penalty) {
+          elites.remove(sort.getLast());
+          sort.getLast().isElite = false;
           elites.add(g);
           g.isElite = true;
           System.out.println("A new Elite with penalty " + g.penalty + " replaced an old one");
@@ -150,6 +158,7 @@ public class ShadowEvolution {
     ArrayList<Integer> c = eco.translate(MaxCliqueProblem.solve(graph));
     eco.assign(Group.C, c);
 
+    NameRegistry.reset();
     for (Course co : eco.env.values()) {
       for (String s : co.getStudents()) {
         NameRegistry.entry(s, co, co.getGroup());
@@ -165,20 +174,20 @@ public class ShadowEvolution {
             + "    Max Penalty: "
             + result.getLast().penalty
             + "\n"
-            + "Which means, a total of "
+            + "A total of "
             + eco.unassigned().size()
             + " courses cannot be scheduled properly\n"
             + "- Groups Arrangement\n"
             + "    Group A: "
-            + NameRegistry.listAllInGroup(Group.A, "   ")
+            + NameRegistry.listAllInGroup(Group.A, "; ")
             + "\n"
             + "    Group B: "
-            + NameRegistry.listAllInGroup(Group.B, "   ")
+            + NameRegistry.listAllInGroup(Group.B, "; ")
             + "\n"
             + "    Group C: "
-            + NameRegistry.listAllInGroup(Group.C, "   ")
+            + NameRegistry.listAllInGroup(Group.C, "; ")
             + "\n"
-            + "- Courses Failed to be arranged properly");
+            + "- Courses failed to be arranged properly");
     for (Course co : eco.unassigned()) {
       System.out.print(NameRegistry.courseName(co) + ", ");
     }

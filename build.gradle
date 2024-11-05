@@ -1,21 +1,25 @@
 plugins {
-    id 'application'
+  id 'application'
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 application {
-    mainClass = 'io.ckgxrg.xchelf.Xchelf'
+  mainClass = 'io.ckgxrg.xchelf.Xchelf'
+}
+
+run {
+  standardInput = System.in
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
-    archiveBaseName = 'xchelf'
-    archiveVersion = '0.1.0'
+  archiveBaseName = 'xchelf'
+  archiveVersion = '0.1.0'
 }

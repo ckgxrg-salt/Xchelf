@@ -3,9 +3,7 @@ package io.ckgxrg.xchelf.data;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/*
- * A place to store student names for query.
- */
+/** A place to store student names for query. */
 public class NameRegistry {
 
   public static HashMap<String, Course> A = new HashMap<String, Course>();
@@ -14,53 +12,67 @@ public class NameRegistry {
 
   public static HashSet<String> students = new HashSet<String>();
 
-  /*
+  /**
    * Registers the arrangement.
+   *
+   * @param student The student name
+   * @param c The course instance
+   * @param g The course group
+   * @return Whether this entry succeeded or not.
    */
-  public static void entry(String student, Course c, Group g) {
+  public static boolean entry(String student, Course c, Group g) {
     students.add(student);
     switch (g) {
       case Group.A:
         if (A.get(student) != null) {
-          System.out.println(
-              "Refusing, "
-                  + student
-                  + " already chose "
-                  + courseName(A.get(student))
-                  + " at group "
-                  + g);
-          break;
+          /*System.out.println(
+          "Refusing, "
+              + student
+              + " already chose "
+              + courseName(A.get(student))
+              + " at group "
+           + g);*/
+          return false;
         }
         A.put(student, c);
         break;
       case Group.B:
         if (B.get(student) != null) {
-          System.out.println(
-              "Refusing, "
-                  + student
-                  + " already chose "
-                  + courseName(B.get(student))
-                  + " at group "
-                  + g);
-          break;
+          /*System.out.println(
+          "Refusing, "
+              + student
+              + " already chose "
+              + courseName(B.get(student))
+              + " at group "
+              + g);*/
+          return false;
         }
         B.put(student, c);
         break;
       case Group.C:
         if (C.get(student) != null) {
-          System.out.println(
-              "Refusing, "
-                  + student
-                  + " already chose "
-                  + courseName(C.get(student))
-                  + " at group "
-                  + g);
-          break;
+          /*System.out.println(
+          "Refusing, "
+              + student
+              + " already chose "
+              + courseName(C.get(student))
+              + " at group "
+              + g);*/
+          return false;
         }
         C.put(student, c);
         break;
       default:
+        return false;
     }
+    return true;
+  }
+
+  public static void reset() {
+    A.clear();
+    B.clear();
+    C.clear();
+    students.clear();
   }
 
   /*

@@ -1,7 +1,7 @@
 package io.ckgxrg.xchelf;
 
-import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.genetics.ShadowEvolution;
+import java.util.Scanner;
 
 /*
  * Main class of the Xchelf schedule arrangement system.
@@ -17,8 +17,24 @@ public class Xchelf {
   public static void main(String[] args) {
     Interpreter.parseFile("testinput");
     ShadowEvolution.populateStage();
-    ShadowEvolution.iterate();
+    Scanner sc = new Scanner(System.in);
+    String command = "";
+    int remaining = 0;
+    do {
+      ShadowEvolution.iterate();
+      System.out.println("Next Generation? (Y/n)");
+      if (remaining > 0) {
+        remaining--;
+        System.out.println("Auto-loop: " + remaining + " left");
+        continue;
+      }
+      if (sc.hasNextInt()) {
+        remaining = sc.nextInt();
+      } else if (sc.hasNext()) {
+        command = sc.next();
+      }
+    } while (!command.equals("n"));
+    sc.close();
     ShadowEvolution.generateReport();
-    System.out.println(Courses.Psy.getGroup());
   }
 }

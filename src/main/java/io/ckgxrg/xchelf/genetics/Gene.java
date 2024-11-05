@@ -52,12 +52,12 @@ public class Gene implements Comparable<Gene> {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < m.getStudents().size(); i++) {
         if (Math.random() < ShadowEvolution.MUTATE_PROBABLITY) {
-          System.out.print("A gene mutated! ");
+          // System.out.print("A gene mutated! ");
           Random r = new Random();
           ArrayList<ShadowCourse> options = m.getShadows();
           sb.append(options.get(r.nextInt(options.size())).getId());
           sb.append(";");
-          System.out.println("It looks like this currently: " + sb.toString());
+          // System.out.println("It looks like this currently: " + sb.toString());
           continue;
         }
         if (Math.random() < 0.5) {
