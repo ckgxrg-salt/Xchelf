@@ -2,10 +2,7 @@ package io.ckgxrg.xchelf.math;
 
 import java.util.ArrayList;
 
-/*
- * Use the back trace algorithm to find the largest
- * clique of the graph.
- */
+/** Use the back trace algorithm to find the largest clique of the graph. */
 public class MaxCliqueProblem {
 
   static Graph g;
@@ -15,6 +12,12 @@ public class MaxCliqueProblem {
   static ArrayList<Integer> nodes;
   static ArrayList<Integer> solution;
 
+  /**
+   * The entrance method.
+   *
+   * @param graph The graph to work on
+   * @return List of indices constituting the max clique
+   */
   public static ArrayList<Integer> solve(Graph graph) {
     // First assume the root node R is connected to Node 0.
     g = graph;
@@ -28,16 +31,14 @@ public class MaxCliqueProblem {
     return solution;
   }
 
-  /*
-   * Similar as Graph.adjacents, but eliminated possibility of infinite recursion.
-   */
+  /** Similar as Graph.adjacents, but eliminated possibility of infinite recursion. */
   private static ArrayList<Integer> enhancedAdjacents(int node) {
     ArrayList<Integer> arr = g.adjacents(node);
     arr.removeAll(nodes);
     return arr;
   }
 
-  // The main recursion method.
+  /** The main recursion method. */
   @SuppressWarnings("unchecked")
   private static void trace(int node) {
     // System.out.println("At Node: " + node);
@@ -60,15 +61,19 @@ public class MaxCliqueProblem {
       return;
     }
     for (int i : g.adjacents(node)) {
-      if (nodes.contains(i)) continue;
+      if (nodes.contains(i)) {
+        continue;
+      }
       trace(i);
     }
   }
 
-  // Verifies if a node is connected to all previous nodes.
+  /** Verifies if a node is connected to all previous nodes. */
   private static boolean allConnected(int node) {
     for (int i : nodes) {
-      if (!g.connected(node, i)) return false;
+      if (!g.connected(node, i)) {
+        return false;
+      }
     }
     return true;
   }

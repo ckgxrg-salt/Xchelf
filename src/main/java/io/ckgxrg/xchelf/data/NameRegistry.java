@@ -68,6 +68,7 @@ public class NameRegistry {
     return true;
   }
 
+  /** Clears contents of the registry, used for evaluating penalty. */
   public static void reset() {
     A.clear();
     B.clear();
@@ -75,8 +76,12 @@ public class NameRegistry {
     students.clear();
   }
 
-  /*
+  /**
    * Queries a student's course arrangement of a group.
+   *
+   * @param student The student name
+   * @param g The group
+   * @return The course the student takes in the group
    */
   public static Course courseOf(String student, Group g) {
     switch (g) {
@@ -92,6 +97,13 @@ public class NameRegistry {
     }
   }
 
+  /**
+   * Lists all courses in a group, separated by the delimiter.
+   *
+   * @param g The group
+   * @param delimiter The separation
+   * @return Formatted string containing all the course names
+   */
   public static String listAllInGroup(Group g, String delimiter) {
     StringBuilder sb = new StringBuilder();
     switch (g) {

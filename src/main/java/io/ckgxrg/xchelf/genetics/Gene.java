@@ -48,10 +48,14 @@ public class Gene implements Comparable<Gene> {
    */
   public Gene mate(Gene other) {
     HashMap<MasterCourse, String> childSegments = new HashMap<MasterCourse, String>();
+    double currentMutateProbablity =
+        this.penalty == other.penalty
+            ? ShadowEvolution.MUTATE_PROBABLITY * 25
+            : ShadowEvolution.MUTATE_PROBABLITY;
     for (MasterCourse m : Courses.getShadowMasters()) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < m.getStudents().size(); i++) {
-        if (Math.random() < ShadowEvolution.MUTATE_PROBABLITY) {
+        if (Math.random() < currentMutateProbablity) {
           // System.out.print("A gene mutated! ");
           Random r = new Random();
           ArrayList<ShadowCourse> options = m.getShadows();

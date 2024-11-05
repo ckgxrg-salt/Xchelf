@@ -3,10 +3,11 @@ package io.ckgxrg.xchelf;
 import io.ckgxrg.xchelf.genetics.ShadowEvolution;
 import java.util.Scanner;
 
-/*
+/**
  * Main class of the Xchelf schedule arrangement system.
+ *
  * @author ckgxrg
- * @version 0.1
+ * @version 1.0.0
  */
 public class Xchelf {
   /**

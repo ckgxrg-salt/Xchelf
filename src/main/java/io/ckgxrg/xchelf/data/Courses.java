@@ -83,6 +83,11 @@ public class Courses {
     return c;
   }
 
+  /**
+   * Removes a course from the register.
+   *
+   * @param id The course to be removed
+   */
   public static void leave(int id) {
     map.remove(id);
   }

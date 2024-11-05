@@ -3,9 +3,7 @@ package io.ckgxrg.xchelf.data;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/*
- * Represents a course to be chosen.
- */
+/** Represents a course to be chosen. */
 public class Course {
 
   public int id;
@@ -13,8 +11,11 @@ public class Course {
   ArrayList<String> students;
   public Group group;
 
-  /*
+  /**
    * A course entry.
+   *
+   * @param id The course id
+   * @param courseName The course name
    */
   public Course(int id, String courseName) {
     name = courseName;
@@ -23,8 +24,10 @@ public class Course {
     this.students = new ArrayList<String>();
   }
 
-  /*
+  /**
    * Enroll a student to the course.
+   *
+   * @param name The student name
    */
   public void addStudent(String name) {
     students.add(name);
@@ -38,13 +41,15 @@ public class Course {
     Collections.sort(students);
   }
 
+  /**
+   * Makes a whole shift of student list.
+   *
+   * @param students The new student list
+   */
   public void groupMove(ArrayList<String> students) {
     this.students = students;
   }
 
-  /*
-   * Return the list of students
-   */
   public ArrayList<String> getStudents() {
     return students;
   }
@@ -72,9 +77,12 @@ public class Course {
     return this.group;
   }
 
-  /*
-   * If there is any student overlapping in the 2 courses,
-   * the 2 courses cannot be in the same group.
+  /**
+   * If there is any student overlapping in the 2 courses, the 2 courses cannot be in the same
+   * group.
+   *
+   * @param other The other course
+   * @return Whether the 2 courses conflict
    */
   public boolean conflict(Course other) {
     for (String s : other.students) {

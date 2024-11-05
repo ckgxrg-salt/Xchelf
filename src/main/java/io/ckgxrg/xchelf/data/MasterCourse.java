@@ -2,11 +2,11 @@ package io.ckgxrg.xchelf.data;
 
 import java.util.ArrayList;
 
-/*
- * A ShadowCourse is a Course that, depending on number of people chosen it, can have multiple classes.
- * The MasterCourse is a placeholder of the ShadowCourse, it will not be arranged into the schedule.
- * Each of the shadows reflect a "class" of the ShadowCourse.
- * Shadows have IDs that is like 1002, 405... while the master's is similar to ordinary courses.
+/**
+ * A ShadowCourse is a Course that, depending on number of people chose it, can have multiple
+ * classes. The MasterCourse is a placeholder of the ShadowCourse, it will not be arranged into the
+ * schedule. Each of the shadows reflect a "class" of the ShadowCourse. Shadows have IDs that is
+ * like 1002, 405... while the master's is similar to ordinary courses.
  */
 public class MasterCourse extends Course {
 
@@ -14,6 +14,12 @@ public class MasterCourse extends Course {
   int shadowInitialId;
   int shadowCount;
 
+  /**
+   * Creates a MasterCourse.
+   *
+   * @param id The course id
+   * @param courseName The course name(without Master suffix)
+   */
   public MasterCourse(int id, String courseName) {
     super(id, courseName);
     shadows = new ArrayList<ShadowCourse>();
@@ -24,6 +30,11 @@ public class MasterCourse extends Course {
     return this.shadowCount;
   }
 
+  /**
+   * Initialises all shadows, invoke this prior to any operation to the shadows.
+   *
+   * @param shadowCount How many shadows this should have
+   */
   public void summonShadows(int shadowCount) {
     this.shadowCount = shadowCount;
     for (int i = 0; i < shadowCount; i++) {

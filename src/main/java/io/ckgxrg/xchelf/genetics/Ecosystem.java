@@ -96,9 +96,11 @@ public class Ecosystem {
     return res;
   }
 
-  /*
-   * Assign a Group to the processed courses and remove them from the
-   * to-be-grouped list.
+  /**
+   * Assign a Group to the processed courses and remove them from the to-be-grouped list.
+   *
+   * @param g The group
+   * @param arr List of course ids to be assigned
    */
   public void assign(Group g, ArrayList<Integer> arr) {
     for (Integer i : arr) {
@@ -116,6 +118,11 @@ public class Ecosystem {
     return todo.isEmpty();
   }
 
+  /**
+   * Finds out what courses are not assigned yet.
+   *
+   * @return List of courses that haven't been assigned
+   */
   public ArrayList<Course> unassigned() {
     ArrayList<Course> res = new ArrayList<Course>();
     for (Course c : env.values()) {

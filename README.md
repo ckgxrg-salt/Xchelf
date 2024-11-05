@@ -29,8 +29,9 @@ Use a genetic algorithm, where the chromosome is the internal arrangement.
 The fitness can be calculated by the process above, and count the flaws(the courses that cannot be arranged to a group).
 Then iterate, until finding a best solution, and put this back to the above method to get the final schedule.
 
+## Details
+The mutate probablity is basically not so high, but when both parents' penalties are the same(i.e. the current generation likely lacks of diversity), the mutate probablity will be multiplied by 25 to ensure diversity.
+Currently, a course failed to assign makes a +10 penalty to a Gene, and a student failed to take their wanted course makes a +2 penalty to a Gene.
+
 ## Progress
 Simple courses can already be arranged, and is undergoing test in JNFLSIC.
-Currently implementing ShadowCourses
-TODO: add deviation to prevent overemphasise on one group
-TODO: consider student satisfaction in penalty
