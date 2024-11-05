@@ -43,7 +43,7 @@ public class Xchelf {
   }
 
   public static void handleComplex() {
-    for (Course c : NameRegistry.allCourses) {
+    for (Course c : Courses.getShadowMasters()) {
       // System.out.println("Not at: " + c.getName());
       for (String s : c.getStudents()) {
         NameRegistry.entry(s, c, c.getGroup());
@@ -57,23 +57,13 @@ public class Xchelf {
     }
   }
 
+  /**
+   * The main entry.
+   *
+   * @param args Arguments passed from the command-line.
+   */
   public static void main(String[] args) {
-    Courses.Phys2.addStudent("山羊");
-    Courses.Eco.addStudent("山羊");
-    Courses.FM.addStudent("山羊");
-    Courses.Chem.addStudent("咕噜");
-    Courses.FM.addStudent("咕噜");
-    Courses.Acc.addStudent("咕噜");
-    Courses.Phys.addStudent("下雨");
-    Courses.FM.addStudent("下雨");
-    Courses.CS.addStudent("下雨");
-    Courses.FM.addStudent("海燕");
-    Courses.Psy.addStudent("海燕");
-    Courses.Art.addStudent("海燕");
-    Courses.FM.addStudent("老郑！");
-    Courses.FM.addStudent("孙笑川");
-    Courses.FM.addStudent("谁问你了");
-    NameRegistry.allCourses.addAll(Courses.map.values());
+    Intepreter.parseFile("testinput");
     Individual i = new Individual(Courses.getShadowMasters());
     i.test();
   }

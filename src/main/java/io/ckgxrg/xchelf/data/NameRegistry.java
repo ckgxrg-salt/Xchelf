@@ -13,7 +13,6 @@ public class NameRegistry {
   public static HashMap<String, Course> C = new HashMap<String, Course>();
 
   public static HashSet<String> students = new HashSet<String>();
-  public static HashSet<Course> allCourses = new HashSet<Course>();
 
   /*
    * Registers the arrangement.
@@ -64,13 +63,28 @@ public class NameRegistry {
     }
   }
 
-  /*
-   * There is a potential problem of null pointers when a course is not chosen.
-   * Use this method instead of Course.getName() to prevent error.
+  /**
+   * There is a potential problem of null pointers when a course is not chosen. Use this method
+   * instead of Course.getName() to prevent error.
+   *
+   * @param c The course instance
+   * @return The course name, if exists, or "Empty"
    */
   @SuppressWarnings("deprecation")
   public static String courseName(Course c) {
-    if (c == null) return "Empty";
+    if (c == null) {
+      return "Empty";
+    }
     return c.getName();
+  }
+
+  /**
+   * Same as above.
+   *
+   * @param id The course ID
+   * @return The course name, if exists, or "Empty"
+   */
+  public static String courseName(int id) {
+    return courseName(Courses.getCourseById(id));
   }
 }

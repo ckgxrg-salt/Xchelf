@@ -1,13 +1,13 @@
 package io.ckgxrg.xchelf.handler;
 
 import io.ckgxrg.xchelf.data.Course;
-import io.ckgxrg.xchelf.data.NameRegistry;
+import io.ckgxrg.xchelf.data.Courses;
 import java.util.ArrayList;
 
 public class ConflictHandler {
 
   public static void why(Course c) {
-    for (Course d : NameRegistry.allCourses) {
+    for (Course d : Courses.getShadowMasters()) {
       ArrayList<String> arr;
       if (!(arr = findOverlap(c.getStudents(), d.getStudents())).isEmpty()) {
         System.out.print("With course " + d.name + "(Group " + d.getGroup() + ")");

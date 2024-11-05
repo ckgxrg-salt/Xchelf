@@ -36,8 +36,7 @@ public class Courses {
    * AS Art and Design: 10
    * (Shadow) AS Further Mathematics: 11
    *
-   * The Complex courses do not represent the actual course.
-   * @see io.ckgxrg.xchelf.data.ComplexCourse.getActual();
+   * The MasterCourses do not represent the shadows.
    */
   public static Course Phys = register(0, "AS Physics", 3);
   public static Course Phys2 = register(1, "A2 Physics");
@@ -81,6 +80,7 @@ public class Courses {
       c = new MasterCourse(id, name);
       ((MasterCourse) c).setShadowCount(shadows);
       shadowMasters.add((MasterCourse) c);
+      map.put(id, c);
     }
     return c;
   }
@@ -178,5 +178,25 @@ public class Courses {
       if (c.group == Group.UNKNOWN) res.add(c);
     }
     return res;
+  }
+
+  /**
+   * Accepts a course ID and a student name, then add the student to the course.
+   *
+   * @param courseId The course
+   * @param student The student name
+   */
+  public static void addStudentById(int courseId, String student) {
+    map.get(courseId).addStudent(student);
+  }
+
+  /**
+   * Returns the Course instance by the given ID.
+   *
+   * @param courseId The course ID
+   * @return The Course instance
+   */
+  public static Course getCourseById(int courseId) {
+    return map.get(courseId);
   }
 }
