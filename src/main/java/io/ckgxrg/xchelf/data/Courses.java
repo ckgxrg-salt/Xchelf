@@ -99,23 +99,6 @@ public class Courses {
   }
 
   /**
-   * Debug use.
-   *
-   * @param courses A list of course ids
-   * @return A pretty form of the courses
-   */
-  public static String prettyPrint(ArrayList<Integer> courses) {
-    StringBuilder sb = new StringBuilder("[ ");
-    for (Integer i : courses) {
-      sb.append(NameRegistry.courseName(map.get(i)));
-      sb.append(", ");
-    }
-    sb.delete(sb.length() - 2, sb.length());
-    sb.append(" ]");
-    return sb.toString();
-  }
-
-  /**
    * Accepts a course ID and a student name, then add the student to the course.
    *
    * @param courseId The course

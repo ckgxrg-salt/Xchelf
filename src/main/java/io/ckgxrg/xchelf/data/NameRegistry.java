@@ -21,28 +21,45 @@ public class NameRegistry {
     students.add(student);
     switch (g) {
       case Group.A:
-        if (A.get(student) != null && !(A.get(student) instanceof ShadowCourse)) {
-          // System.out.println("Refusing, this student already chose a course at this group.");
+        if (A.get(student) != null) {
+          System.out.println(
+              "Refusing, "
+                  + student
+                  + " already chose "
+                  + courseName(A.get(student))
+                  + " at group "
+                  + g);
           break;
         }
         A.put(student, c);
         break;
       case Group.B:
-        if (B.get(student) != null && !(B.get(student) instanceof ShadowCourse)) {
-          // System.out.println("Refusing, this student already chose a course at this group.");
+        if (B.get(student) != null) {
+          System.out.println(
+              "Refusing, "
+                  + student
+                  + " already chose "
+                  + courseName(B.get(student))
+                  + " at group "
+                  + g);
           break;
         }
         B.put(student, c);
         break;
       case Group.C:
-        if (C.get(student) != null && !(C.get(student) instanceof ShadowCourse)) {
-          // System.out.println("Refusing, this student already chose a course at this group.");
+        if (C.get(student) != null) {
+          System.out.println(
+              "Refusing, "
+                  + student
+                  + " already chose "
+                  + courseName(C.get(student))
+                  + " at group "
+                  + g);
           break;
         }
         C.put(student, c);
         break;
       default:
-        // System.out.println("How do we get here");
     }
   }
 
@@ -61,6 +78,36 @@ public class NameRegistry {
         System.out.println("WARNING: Not registered yet");
         return null;
     }
+  }
+
+  public static String listAllInGroup(Group g, String delimiter) {
+    StringBuilder sb = new StringBuilder();
+    switch (g) {
+      case Group.A:
+        HashSet<Course> valueA = new HashSet<Course>(A.values());
+        for (Course co : valueA) {
+          sb.append(courseName(co));
+          sb.append(delimiter);
+        }
+        break;
+      case Group.B:
+        HashSet<Course> valueB = new HashSet<Course>(B.values());
+        for (Course co : valueB) {
+          sb.append(courseName(co));
+          sb.append(delimiter);
+        }
+        break;
+      case Group.C:
+        HashSet<Course> valueC = new HashSet<Course>(C.values());
+        for (Course co : valueC) {
+          sb.append(courseName(co));
+          sb.append(delimiter);
+        }
+        break;
+      default:
+        System.err.println("WTF");
+    }
+    return sb.toString();
   }
 
   /**

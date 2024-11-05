@@ -2,6 +2,7 @@ package io.ckgxrg.xchelf.genetics;
 
 import io.ckgxrg.xchelf.data.Course;
 import io.ckgxrg.xchelf.data.Group;
+import io.ckgxrg.xchelf.data.NameRegistry;
 import io.ckgxrg.xchelf.math.Graph;
 import io.ckgxrg.xchelf.math.MaxCliqueProblem;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class ShadowEvolution {
   public static final int MIN_CAPACITY = 20;
   public static final int ELITE_COUNT = 5;
   public static final int ELITE_MAX_PENALTY = 30;
-  public static final double MUTATE_PROBABLITY = 0.0005;
+  public static final double MUTATE_PROBABLITY = 0.00005;
 
   public static HashSet<Gene> population;
   public static HashSet<Gene> elites;
@@ -41,7 +42,6 @@ public class ShadowEvolution {
       Ecosystem eco = new Ecosystem(g);
       Graph graph = eco.generateGraph();
       ArrayList<Integer> a = eco.translate(MaxCliqueProblem.solve(graph));
-      // System.out.println("Group A: " + Courses.prettyPrint(A));
       eco.assign(Group.A, a);
       graph = eco.generateGraph();
 
@@ -129,5 +129,66 @@ public class ShadowEvolution {
         }
       }
     }
+  }
+
+  /** Finalises the evolution and generates a report using the current generation. */
+  public static void generateReport() {
+    System.out.println("Evolution ended. Generating report using the current generation...");
+    ArrayList<Gene> result = new ArrayList<Gene>(population);
+    Collections.sort(result);
+    Ecosystem eco = new Ecosystem(result.getFirst());
+    Graph graph = eco.generateGraph();
+
+    ArrayList<Integer> a = eco.translate(MaxCliqueProblem.solve(graph));
+    eco.assign(Group.A, a);
+    graph = eco.generateGraph();
+
+    ArrayList<Integer> b = eco.translate(MaxCliqueProblem.solve(graph));
+    eco.assign(Group.B, b);
+    graph = eco.generateGraph();
+
+    ArrayList<Integer> c = eco.translate(MaxCliqueProblem.solve(graph));
+    eco.assign(Group.C, c);
+
+    for (Course co : eco.env.values()) {
+      for (String s : co.getStudents()) {
+        NameRegistry.entry(s, co, co.getGroup());
+      }
+    }
+
+    System.out.println(
+        "==========Xchelf Report==========\n"
+            + "- Current Generation\n"
+            + "    Min Penalty: "
+            + result.getFirst().penalty
+            + "\n"
+            + "    Max Penalty: "
+            + result.getLast().penalty
+            + "\n"
+            + "Which means, a total of "
+            + eco.unassigned().size()
+            + " courses cannot be scheduled properly\n"
+            + "- Groups Arrangement\n"
+            + "    Group A: "
+            + NameRegistry.listAllInGroup(Group.A, "   ")
+            + "\n"
+            + "    Group B: "
+            + NameRegistry.listAllInGroup(Group.B, "   ")
+            + "\n"
+            + "    Group C: "
+            + NameRegistry.listAllInGroup(Group.C, "   ")
+            + "\n"
+            + "- Courses Failed to be arranged properly");
+    for (Course co : eco.unassigned()) {
+      System.out.print(NameRegistry.courseName(co) + ", ");
+    }
+    System.out.println("\n- Student Schedules");
+    for (String s : NameRegistry.students) {
+      System.out.print(s + ": ");
+      System.out.print(NameRegistry.courseName(NameRegistry.courseOf(s, Group.A)) + " | ");
+      System.out.print(NameRegistry.courseName(NameRegistry.courseOf(s, Group.B)) + " | ");
+      System.out.print(NameRegistry.courseName(NameRegistry.courseOf(s, Group.C)) + "\n");
+    }
+    System.out.println("========End Xchelf Report========");
   }
 }

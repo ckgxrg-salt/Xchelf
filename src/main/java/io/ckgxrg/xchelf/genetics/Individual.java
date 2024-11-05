@@ -54,7 +54,7 @@ public class Individual {
   }
 
   /** Prints the internal structure. */
-  public void test() {
+  public static void test() {
     for (MasterCourse m : Courses.getShadowMasters()) {
       System.out.println("In MasterCourse " + NameRegistry.courseName(m));
       for (ShadowCourse s : m.getShadows()) {

@@ -32,3 +32,5 @@ Then iterate, until finding a best solution, and put this back to the above meth
 ## Progress
 Simple courses can already be arranged, and is undergoing test in JNFLSIC.
 Currently implementing ShadowCourses
+TODO: add deviation to prevent overemphasise on one group
+TODO: consider student satisfaction in penalty

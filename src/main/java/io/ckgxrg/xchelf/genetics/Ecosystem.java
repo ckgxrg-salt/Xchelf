@@ -20,6 +20,7 @@ public class Ecosystem {
 
   HashMap<Integer, Integer> trans;
   HashMap<Integer, Course> env;
+  HashMap<Integer, Course> todo;
 
   /**
    * An ecosystem takes consideration of all simple courses recorded in Courses.map, and also adds
@@ -27,6 +28,7 @@ public class Ecosystem {
    *
    * @param g The Gene given
    */
+  @SuppressWarnings("unchecked")
   public Ecosystem(Gene g) {
     this.env = new HashMap<Integer, Course>();
     for (Integer i : Courses.map.keySet()) {
@@ -45,6 +47,7 @@ public class Ecosystem {
       }
     }
     env.putAll(shadows);
+    todo = (HashMap<Integer, Course>) env.clone();
   }
 
   /** Debug use. */
@@ -62,14 +65,14 @@ public class Ecosystem {
    * @return The generated graph
    */
   public Graph generateGraph() {
-    Graph g = new Graph(env.size());
+    Graph g = new Graph(todo.size());
     trans = new HashMap<Integer, Integer>();
     int index = 0;
-    for (int i : env.keySet()) {
+    for (int i : todo.keySet()) {
       trans.put(index, i);
       int jndex = 0;
-      for (int j : env.keySet()) {
-        if (!env.get(i).conflict(env.get(j))) {
+      for (int j : todo.keySet()) {
+        if (!todo.get(i).conflict(todo.get(j))) {
           g.connect(index, jndex);
         }
         jndex++;
@@ -100,26 +103,25 @@ public class Ecosystem {
   public void assign(Group g, ArrayList<Integer> arr) {
     for (Integer i : arr) {
       env.get(i).group = g;
-      env.remove(i);
+      todo.remove(i);
     }
   }
 
-  /*
+  /**
    * Checks if all courses have been assigned to a group.
+   *
+   * @return Self-explainary
    */
   public boolean allAssigned() {
-    for (Course c : env.values()) {
-      if (c.group == Group.UNKNOWN) {
-        return false;
-      }
-    }
-    return true;
+    return todo.isEmpty();
   }
 
   public ArrayList<Course> unassigned() {
     ArrayList<Course> res = new ArrayList<Course>();
     for (Course c : env.values()) {
-      if (c.group == Group.UNKNOWN) res.add(c);
+      if (c.group == Group.UNKNOWN) {
+        res.add(c);
+      }
     }
     return res;
   }
