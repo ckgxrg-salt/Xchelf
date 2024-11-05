@@ -3,7 +3,10 @@ package io.ckgxrg.xchelf.genetics;
 import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.data.MasterCourse;
 import io.ckgxrg.xchelf.data.NameRegistry;
+import io.ckgxrg.xchelf.data.ShadowCourse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Express an Individual's chromosome using a String format, making it easier to carry out crossover
@@ -48,6 +51,15 @@ public class Gene implements Comparable<Gene> {
     for (MasterCourse m : Courses.getShadowMasters()) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < m.getStudents().size(); i++) {
+        if (Math.random() < ShadowEvolution.MUTATE_PROBABLITY) {
+          System.out.print("A gene mutated! ");
+          Random r = new Random();
+          ArrayList<ShadowCourse> options = m.getShadows();
+          sb.append(options.get(r.nextInt(options.size())).getId());
+          sb.append(";");
+          System.out.println("It looks like this currently: " + sb.toString());
+          continue;
+        }
         if (Math.random() < 0.5) {
           sb.append(this.segments.get(m).split(";")[i]);
           sb.append(";");

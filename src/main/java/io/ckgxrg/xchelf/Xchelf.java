@@ -36,6 +36,6 @@ public class Xchelf {
   public static void main(String[] args) {
     Interpreter.parseFile("testinput");
     ShadowEvolution.populateStage();
-    ShadowEvolution.stableStage();
+    ShadowEvolution.iterate();
   }
 }

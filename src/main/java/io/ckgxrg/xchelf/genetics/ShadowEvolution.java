@@ -2,7 +2,6 @@ package io.ckgxrg.xchelf.genetics;
 
 import io.ckgxrg.xchelf.data.Course;
 import io.ckgxrg.xchelf.data.Group;
-import io.ckgxrg.xchelf.data.NameRegistry;
 import io.ckgxrg.xchelf.math.Graph;
 import io.ckgxrg.xchelf.math.MaxCliqueProblem;
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ public class ShadowEvolution {
   public static final int MIN_CAPACITY = 20;
   public static final int ELITE_COUNT = 5;
   public static final int ELITE_MAX_PENALTY = 30;
+  public static final double MUTATE_PROBABLITY = 0.0005;
 
   public static HashSet<Gene> population;
   public static HashSet<Gene> elites;
@@ -32,6 +32,7 @@ public class ShadowEvolution {
     }
     System.out.println("Initial generation populated. ");
     calculatePenalty(new ArrayList<Gene>(population));
+    System.out.println("Initial penalty calculated. ");
   }
 
   /** Calculates penalty for each Gene in the set. Very expensive. */
@@ -56,7 +57,6 @@ public class ShadowEvolution {
       g.penalty = 0;
       for (Course co : eco.unassigned()) {
         g.penalty += 10;
-        System.out.println(NameRegistry.courseName(co));
       }
     }
   }
@@ -68,7 +68,7 @@ public class ShadowEvolution {
    * next generation, if there are equally-ranked Individuals, put them in too, however, if the
    * number meets MAX_CAPACITY, immediately finish the selection.
    */
-  public static void stableStage() {
+  public static void iterate() {
     ArrayList<Gene> candidates = new ArrayList<Gene>();
     candidates.addAll(population);
     Collections.sort(candidates);
@@ -83,6 +83,8 @@ public class ShadowEvolution {
     calculatePenalty(candidates);
     Collections.sort(candidates);
     population.clear();
+    // Protect the elites
+    population.addAll(elites);
     int current = candidates.getFirst().penalty;
     System.out.println("Current Generation lowest penalty: " + current);
     for (Gene g : candidates) {
@@ -94,10 +96,11 @@ public class ShadowEvolution {
       } else {
         current = g.penalty;
       }
-      System.out.println("Selected Gene with penalty " + g.penalty);
       population.add(g);
       eliteCheck(g);
     }
+    System.out.println("Current Generation highest penalty: " + current);
+    System.out.println("Current Generation size: " + population.size());
   }
 
   /**
@@ -108,6 +111,7 @@ public class ShadowEvolution {
     if (g.penalty <= ELITE_MAX_PENALTY) {
       if (elites.size() < ELITE_COUNT) {
         elites.add(g);
+        g.isElite = true;
         System.out.println("Found a new Elite with penalty " + g.penalty);
       } else {
         Gene highest = g;
@@ -118,8 +122,10 @@ public class ShadowEvolution {
         }
         if (highest != g) {
           elites.remove(highest);
+          highest.isElite = false;
           elites.add(g);
-          System.out.println("Found another new Elite with penalty " + g.penalty);
+          g.isElite = true;
+          System.out.println("A new Elite with penalty " + g.penalty + " replaced an old one");
         }
       }
     }

@@ -59,6 +59,10 @@ public class Course {
     return this.name;
   }
 
+  public int getId() {
+    return this.id;
+  }
+
   @Override
   public String toString() {
     return "" + this.id;
