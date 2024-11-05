@@ -1,5 +1,6 @@
 # Xchelf
 An experimental schedule arrangement system for JNFLSIC.
+The name itself has no meanings, probably.
 
 ## Problem
 Any elective courses may be either Group A, B or C in the school.

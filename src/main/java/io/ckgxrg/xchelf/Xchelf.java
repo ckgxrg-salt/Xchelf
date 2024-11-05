@@ -4,8 +4,10 @@ import io.ckgxrg.xchelf.data.Course;
 import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.data.Group;
 import io.ckgxrg.xchelf.data.NameRegistry;
+import io.ckgxrg.xchelf.genetics.Gene;
 import io.ckgxrg.xchelf.handler.ConflictHandler;
-import io.ckgxrg.xchelf.math.*;
+import io.ckgxrg.xchelf.math.Graph;
+import io.ckgxrg.xchelf.math.MaxCliqueProblem;
 import java.util.ArrayList;
 
 /*
@@ -64,7 +66,9 @@ public class Xchelf {
    */
   public static void main(String[] args) {
     Intepreter.parseFile("testinput");
-    Individual i = new Individual(Courses.getShadowMasters());
-    i.test();
+    Gene g = new Gene();
+    Gene g2 = new Gene();
+    g.print();
+    g2.print();
   }
 }

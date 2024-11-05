@@ -27,6 +27,7 @@ public class Intepreter {
         }
       }
       br.close();
+      Courses.sortAll();
     } catch (IOException e) {
       e.printStackTrace();
     }

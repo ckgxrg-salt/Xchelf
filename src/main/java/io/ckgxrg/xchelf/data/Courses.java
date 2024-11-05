@@ -7,13 +7,13 @@ import java.util.HashMap;
 /** Manage all courses. */
 public class Courses {
 
-  /**
+  /*
    * Fields for Courses.
    *
-   * @field map The CourseID-Course mapping table, this table reflects the courses that need to be
+   * map: The CourseID-Course mapping table, this table reflects the courses that need to be
    *     actually arranged
-   * @field trans The NodeID-CourseID table used to solve MCP
-   * @field shadowMasters The list of all MasterCourses
+   * trans: The NodeID-CourseID table used to solve MCP
+   * shadowMasters: The list of all MasterCourses
    */
   public static HashMap<Integer, Course> map = new HashMap<Integer, Course>();
 
@@ -23,18 +23,18 @@ public class Courses {
   /*
    * List of all available courses.
    * The Names and IDs are listed below.
-   * (Shadow) AS Physics: 0
-   * A2 Physics: 1
-   * AS Chemistry: 2
-   * A2 Chemistry: 3
-   * AS Economics: 4
-   * (Shadow) A2 Economics: 5
-   * AS Biology: 6
-   * AS Computer Science: 7
-   * AS Psychology: 8
-   * AS Accounting: 9
-   * AS Art and Design: 10
-   * (Shadow) AS Further Mathematics: 11
+   * - (Shadow) AS Physics: 0
+   * - A2 Physics: 1
+   * - AS Chemistry: 2
+   * - A2 Chemistry: 3
+   * - AS Economics: 4
+   * - (Shadow) A2 Economics: 5
+   * - AS Biology: 6
+   * - AS Computer Science: 7
+   * - AS Psychology: 8
+   * - AS Accounting: 9
+   * - AS Art and Design: 10
+   * - (Shadow) AS Further Mathematics: 11
    *
    * The MasterCourses do not represent the shadows.
    */
@@ -78,8 +78,8 @@ public class Courses {
       map.put(id, c);
     } else {
       c = new MasterCourse(id, name);
-      ((MasterCourse) c).setShadowCount(shadows);
       shadowMasters.add((MasterCourse) c);
+      ((MasterCourse) c).summonShadows(shadows);
       map.put(id, c);
     }
     return c;
@@ -93,10 +93,17 @@ public class Courses {
     return shadowMasters;
   }
 
+  /** Sort all students in all courses. */
+  public static void sortAll() {
+    for (Course c : map.values()) {
+      c.sortStudents();
+    }
+  }
+
   /**
    * Creates a graph, where NodeIDs and corresponding CourseIDs are recorded in @field trans Each
    * remaining course as a vertex Each pair of courses with no students overlapping is connected as
-   * an edge from the current @field map table.
+   * an edge from the current map table.
    *
    * @return The generated graph
    */

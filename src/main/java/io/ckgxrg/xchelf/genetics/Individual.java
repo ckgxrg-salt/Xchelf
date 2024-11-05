@@ -1,5 +1,6 @@
-package io.ckgxrg.xchelf.math;
+package io.ckgxrg.xchelf.genetics;
 
+import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.data.MasterCourse;
 import io.ckgxrg.xchelf.data.NameRegistry;
 import io.ckgxrg.xchelf.data.ShadowCourse;
@@ -9,23 +10,10 @@ import java.util.Random;
 /** A wrapper to enclose data related to a complex course. To be used in the Genetic Algorithm. */
 public class Individual {
 
-  ArrayList<MasterCourse> masters;
-
-  /**
-   * Creates an Individual.
-   *
-   * @param masters The list of MasterCourses
-   */
-  public Individual(ArrayList<MasterCourse> masters) {
-    this.masters = masters;
-    random();
-  }
-
   /** Forms the initial Individual, whose chromosome is totally up to entry sequence. */
   @Deprecated
-  void sequence() {
-    for (MasterCourse m : masters) {
-      m.summonShadows();
+  public static void sequence() {
+    for (MasterCourse m : Courses.getShadowMasters()) {
       ArrayList<String> students = m.getStudents();
       int portion = students.size() / m.getShadowCount();
       for (int i = 0; i < m.getShadowCount(); i++) {
@@ -44,9 +32,8 @@ public class Individual {
 
   /** Forms the initial Individual, whose chromosome is totally random. */
   @SuppressWarnings("unchecked")
-  void random() {
-    for (MasterCourse m : masters) {
-      m.summonShadows();
+  public static void random() {
+    for (MasterCourse m : Courses.getShadowMasters()) {
       ArrayList<String> students = (ArrayList<String>) m.getStudents().clone();
       int portion = students.size() / m.getShadowCount();
       Random r = new Random();
@@ -68,7 +55,7 @@ public class Individual {
 
   /** Prints the internal structure. */
   public void test() {
-    for (MasterCourse m : masters) {
+    for (MasterCourse m : Courses.getShadowMasters()) {
       System.out.println("In MasterCourse " + NameRegistry.courseName(m));
       for (ShadowCourse s : m.getShadows()) {
         System.out.println("In ShadowCourse " + NameRegistry.courseName(s));
@@ -79,11 +66,4 @@ public class Individual {
       }
     }
   }
-
-  public void crossover() {}
-
-  /*
-   * Clips a range of the arrangement of shadows and interchange them.
-   */
-  public void interchange(Individual other) {}
 }

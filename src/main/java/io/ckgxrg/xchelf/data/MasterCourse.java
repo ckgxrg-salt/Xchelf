@@ -24,12 +24,8 @@ public class MasterCourse extends Course {
     return this.shadowCount;
   }
 
-  public void setShadowCount(int count) {
-    this.shadowCount = count;
-  }
-
-  public void summonShadows() {
-    if (shadowCount <= 0) System.out.println("ShadowCourse: shadow count not initialised!");
+  public void summonShadows(int shadowCount) {
+    this.shadowCount = shadowCount;
     for (int i = 0; i < shadowCount; i++) {
       ShadowCourse shadow = new ShadowCourse(shadowInitialId + i, this);
       shadows.add(shadow);
@@ -39,5 +35,21 @@ public class MasterCourse extends Course {
 
   public ArrayList<ShadowCourse> getShadows() {
     return shadows;
+  }
+
+  /**
+   * Identifies which shadow the student is now enrolled in.
+   *
+   * @param student The student name
+   * @return The shadow instance
+   */
+  public ShadowCourse whichShadow(String student) {
+    for (ShadowCourse s : this.shadows) {
+      if (s.getStudents().contains(student)) {
+        return s;
+      }
+    }
+    System.err.println("Not found!");
+    return null;
   }
 }
