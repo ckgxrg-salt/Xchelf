@@ -4,11 +4,7 @@ import io.ckgxrg.xchelf.data.Course;
 import io.ckgxrg.xchelf.data.Courses;
 import io.ckgxrg.xchelf.data.Group;
 import io.ckgxrg.xchelf.data.NameRegistry;
-import io.ckgxrg.xchelf.genetics.Gene;
-import io.ckgxrg.xchelf.handler.ConflictHandler;
-import io.ckgxrg.xchelf.math.Graph;
-import io.ckgxrg.xchelf.math.MaxCliqueProblem;
-import java.util.ArrayList;
+import io.ckgxrg.xchelf.genetics.ShadowEvolution;
 
 /*
  * Main class of the Xchelf schedule arrangement system.
@@ -16,33 +12,6 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class Xchelf {
-
-  public static void firstAttempt() {
-    Graph g = Courses.generateGraph();
-    ArrayList<Integer> A = Courses.translate(MaxCliqueProblem.solve(g));
-    System.out.println("Group A: " + Courses.prettyPrint(A));
-    Courses.assign(Group.A, A);
-    g = Courses.generateGraph();
-
-    ArrayList<Integer> B = Courses.translate(MaxCliqueProblem.solve(g));
-    System.out.println("Group B: " + Courses.prettyPrint(B));
-    Courses.assign(Group.B, B);
-    g = Courses.generateGraph();
-
-    ArrayList<Integer> C = Courses.translate(MaxCliqueProblem.solve(g));
-    System.out.println("Group C: " + Courses.prettyPrint(C));
-    Courses.assign(Group.C, C);
-
-    if (Courses.allAssigned()) {
-      System.out.println("First attempt is exhausive, exiting.");
-    } else {
-      System.out.println("Conflicts found: ");
-      for (Course c : Courses.unassigned()) {
-        System.out.println(NameRegistry.courseName(c));
-        ConflictHandler.why(c);
-      }
-    }
-  }
 
   public static void handleComplex() {
     for (Course c : Courses.getShadowMasters()) {
@@ -65,10 +34,8 @@ public class Xchelf {
    * @param args Arguments passed from the command-line.
    */
   public static void main(String[] args) {
-    Intepreter.parseFile("testinput");
-    Gene g = new Gene();
-    Gene g2 = new Gene();
-    g.print();
-    g2.print();
+    Interpreter.parseFile("testinput");
+    ShadowEvolution.populateStage();
+    ShadowEvolution.stableStage();
   }
 }

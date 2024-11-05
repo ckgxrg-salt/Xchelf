@@ -30,7 +30,6 @@ public class MasterCourse extends Course {
       ShadowCourse shadow = new ShadowCourse(shadowInitialId + i, this);
       shadows.add(shadow);
     }
-    this.name += " Master";
   }
 
   public ArrayList<ShadowCourse> getShadows() {

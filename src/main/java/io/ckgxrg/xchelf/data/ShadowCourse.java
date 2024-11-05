@@ -16,12 +16,4 @@ public class ShadowCourse extends Course {
   public MasterCourse getMaster() {
     return master;
   }
-
-  @Override
-  public boolean conflict(Course other) {
-    if (other instanceof ShadowCourse && ((ShadowCourse) other).getMaster().equals(this.master)) {
-      return false;
-    }
-    return super.conflict(other);
-  }
 }

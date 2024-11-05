@@ -11,7 +11,7 @@ public class Course {
   public int id;
   public String name;
   ArrayList<String> students;
-  Group group;
+  public Group group;
 
   /*
    * A course entry.
