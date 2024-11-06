@@ -22,4 +22,9 @@ java {
 jar {
   archiveBaseName = 'xchelf'
   archiveVersion = '1.0.0'
+  manifest {
+	attributes(
+	  'Main-Class': application.mainClass,
+	)
+  }
 }

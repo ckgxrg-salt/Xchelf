@@ -30,7 +30,7 @@ The fitness can be calculated by the process above, and count the flaws(the cour
 Then iterate, until finding a best solution, and put this back to the above method to get the final schedule.
 
 ## Details
-The mutate probablity is basically not so high, but when both parents' penalties are the same(i.e. the current generation likely lacks of diversity), the mutate probablity will be multiplied by 25 to ensure diversity.
+The mutate probablity is basically not so high, but when both parents' penalties are the same(i.e. the current generation likely lacks of diversity), the mutate probablity will be multiplied by 100 to ensure diversity.
 Currently, a course failed to assign makes a +10 penalty to a Gene, and a student failed to take their wanted course makes a +2 penalty to a Gene.
 
 ## Progress

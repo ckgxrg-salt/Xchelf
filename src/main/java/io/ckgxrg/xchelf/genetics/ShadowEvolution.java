@@ -20,8 +20,9 @@ public class ShadowEvolution {
   public static final int PENALTY_UNASSIGNED = 10;
   public static final int PENALTY_CLASH = 2;
 
-  public static HashSet<Gene> population;
-  public static HashSet<Gene> elites;
+  private static HashSet<Gene> population;
+  private static HashSet<Gene> elites;
+  public static int elites_highest_penalty;
 
   /**
    * Initialises the population by randomly generating Individuals, until satisfying the
@@ -38,6 +39,12 @@ public class ShadowEvolution {
     ArrayList<Gene> sort = new ArrayList<Gene>(population);
     calculatePenalty(sort);
     Collections.sort(sort);
+    for (int i = 0; i < ELITE_COUNT; i++) {
+      elites.add(sort.get(i));
+    }
+    elites_highest_penalty = sort.get(ELITE_COUNT - 1).penalty;
+    System.out.println("Initial elites selected. ");
+    showElites();
     System.out.println("Min initial penalty: " + sort.getFirst().penalty);
     System.out.println("Max initial penalty: " + sort.getLast().penalty);
   }
@@ -45,6 +52,10 @@ public class ShadowEvolution {
   /** Calculates penalty for each Gene in the set. Very expensive. */
   public static void calculatePenalty(ArrayList<Gene> candidates) {
     for (Gene g : candidates) {
+      // Skip previously calculated genes
+      if (g.penalty != Integer.MAX_VALUE) {
+        continue;
+      }
       Ecosystem eco = new Ecosystem(g);
       Graph graph = eco.generateGraph();
       ArrayList<Integer> a = eco.translate(MaxCliqueProblem.solve(graph));
@@ -110,6 +121,7 @@ public class ShadowEvolution {
       population.add(g);
       eliteCheck(g);
     }
+    eliteDump();
     population.addAll(elites);
     System.out.println("Current Generation highest penalty: " + current);
     System.out.println("Current Generation size: " + population.size());
@@ -120,23 +132,39 @@ public class ShadowEvolution {
    * protected so they won't be easily eliminated.
    */
   public static void eliteCheck(Gene g) {
-    if (g.penalty <= ELITE_MAX_PENALTY) {
-      if (elites.size() < ELITE_COUNT) {
-        elites.add(g);
-        g.isElite = true;
-        System.out.println("Found a new Elite with penalty " + g.penalty);
-      } else {
-        ArrayList<Gene> sort = new ArrayList<Gene>(elites);
-        Collections.sort(sort);
-        if (sort.getLast().penalty > g.penalty) {
-          elites.remove(sort.getLast());
-          sort.getLast().isElite = false;
-          elites.add(g);
-          g.isElite = true;
-          System.out.println("A new Elite with penalty " + g.penalty + " replaced an old one");
-        }
-      }
+    if (g.penalty < elites_highest_penalty) {
+      elites.add(g);
+      /*System.out.println(
+      "A new Elite with penalty "
+          + g.penalty
+          + " is added to the queue, since the current max penalty is "
+          + elites_highest_penalty);*/
     }
+  }
+
+  /**
+   * Selects only the first ELITE_COUNT elite candidates in the list. Then marks the current max
+   * penalty.
+   */
+  public static void eliteDump() {
+    showElites();
+    ArrayList<Gene> sort = new ArrayList<Gene>(elites);
+    Collections.sort(sort);
+    elites.clear();
+    for (int i = 0; i < ELITE_COUNT; i++) {
+      elites.add(sort.get(i));
+    }
+    elites_highest_penalty = sort.get(ELITE_COUNT - 1).penalty;
+    showElites();
+  }
+
+  /** Debug use. */
+  public static void showElites() {
+    System.out.print("Current Elites: ");
+    for (Gene elite : elites) {
+      System.out.print(elite.penalty + " ");
+    }
+    System.out.println();
   }
 
   /** Finalises the evolution and generates a report using the current generation. */
