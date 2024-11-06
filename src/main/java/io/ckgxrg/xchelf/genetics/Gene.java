@@ -15,6 +15,7 @@ import java.util.Random;
 public class Gene implements Comparable<Gene> {
   HashMap<MasterCourse, String> segments;
   int penalty;
+  int lifetime;
 
   /** Creates a Gene based on the current layout in the MasterCourses and ShadowCourses. */
   public Gene() {
@@ -30,11 +31,13 @@ public class Gene implements Comparable<Gene> {
       segments.put(m, sb.toString());
     }
     this.penalty = Integer.MAX_VALUE;
+    this.lifetime = 0;
   }
 
   private Gene(HashMap<MasterCourse, String> segments) {
     this.segments = segments;
     this.penalty = Integer.MAX_VALUE;
+    this.lifetime = 0;
   }
 
   /**
@@ -47,7 +50,7 @@ public class Gene implements Comparable<Gene> {
     HashMap<MasterCourse, String> childSegments = new HashMap<MasterCourse, String>();
     double currentMutateProbablity =
         this.penalty == other.penalty
-            ? ShadowEvolution.MUTATE_PROBABLITY * 200
+            ? ShadowEvolution.MUTATE_PROBABLITY * ShadowEvolution.diversity_multiplier
             : ShadowEvolution.MUTATE_PROBABLITY;
     for (MasterCourse m : Courses.getShadowMasters()) {
       StringBuilder sb = new StringBuilder();
