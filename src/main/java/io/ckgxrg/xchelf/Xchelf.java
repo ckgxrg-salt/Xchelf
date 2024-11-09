@@ -23,7 +23,7 @@ public class Xchelf {
     int remaining = 0;
     do {
       ShadowEvolution.iterate();
-      System.out.println("Next Generation? (Y/n)");
+      System.out.print("Next Generation? (Y/n) ");
       if (remaining > 0) {
         remaining--;
         System.out.println("Auto-loop: " + remaining + " left");

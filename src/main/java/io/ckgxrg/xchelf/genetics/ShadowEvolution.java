@@ -15,7 +15,7 @@ public class ShadowEvolution {
   public static final int MIN_CAPACITY = 20;
   public static final int ELITE_COUNT = 5;
   public static final double MUTATE_PROBABLITY = 0.00001;
-  public static final int GENE_LIFETIME = 10;
+  public static final int GENE_LIFETIME = 4;
   public static int diversity_multiplier = 1000;
 
   public static final int PENALTY_UNASSIGNED = 10;
@@ -111,10 +111,10 @@ public class ShadowEvolution {
     Collections.sort(candidates);
     population.clear();
     // Protect the elites
-    int current = candidates.getFirst().penalty;
-    System.out.println("Current Generation lowest penalty: " + current);
+    System.out.println("Current Candidates lowest penalty: " + candidates.getFirst().penalty);
+    System.out.println("Current Candidates highest penalty: " + candidates.getLast().penalty);
     // If there are no change, raise mutate probablity to ensure diversity
-    if (current == previous) {
+    if (candidates.getFirst().penalty == previous) {
       diversity_multiplier += 500;
       System.out.println("Diversity Multiplier: " + diversity_multiplier);
     } else {
@@ -122,13 +122,11 @@ public class ShadowEvolution {
     }
     for (Gene g : candidates) {
       if (population.size() >= MAX_CAPACITY) {
+        System.out.println("The first eliminated gene has penalty " + g.penalty);
         break;
       }
-      if (population.size() >= MIN_CAPACITY
-          && ((g.penalty > current) || (g.lifetime >= GENE_LIFETIME))) {
-        break;
-      } else {
-        current = g.penalty;
+      if (population.size() >= MIN_CAPACITY && (g.lifetime >= GENE_LIFETIME)) {
+        continue;
       }
       population.add(g);
       g.lifetime++;
@@ -136,7 +134,6 @@ public class ShadowEvolution {
     }
     eliteDump();
     population.addAll(elites);
-    System.out.println("Current Generation highest penalty(excluding elites): " + current);
     System.out.println("Current Generation size: " + population.size());
   }
 
@@ -146,11 +143,11 @@ public class ShadowEvolution {
    */
   public static void eliteCheck(Gene g) {
     if (g.penalty < elites_highest_penalty) {
-      for (Gene elite : elites) {
+      /*for (Gene elite : elites) {
         if (elite.penalty == g.penalty) {
           return;
         }
-      }
+      }*/
       elites.add(g);
       /*System.out.println(
       "A new Elite with penalty "
